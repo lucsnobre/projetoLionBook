@@ -9,14 +9,17 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="shortcut icon" href="img/Vector.png" type="image/x-icon">
 </head>
 <body>
     <!-- 
     🖼️ BACKGROUND IMAGE:
-    Para adicionar sua imagem de fundo azul:
+    Para adicionar sua imagem de fundo personalizada:
     1. Renomeie sua imagem para "background.jpg"
-    2. Coloque na mesma pasta que este arquivo
-    3. A página detectará automaticamente e aplicará a imagem
+    2. Coloque na mesma pasta que este arquivo (index.html)
+    3. Atualize a página - a imagem será aplicada automaticamente
+    
+    Sem imagem personalizada: gradient elegante será usado como fallback
     -->
     <div class="background-overlay"></div>
     
@@ -67,7 +70,9 @@
                 >
                 </button>
                 
-                <a href="#" class="forgot-password" @click.prevent="showForgotPassword">Forgot password?</a>
+                <div style="text-align: right; width: 100%; margin-top: 0.1px;">
+                    <a href="#" class="forgot-password" @click.prevent="showForgotPassword">Forgot password?</a>
+                </div>
                 
                 <!-- Error Message -->
                 <div x-show="errorMessage" 

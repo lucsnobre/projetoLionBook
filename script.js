@@ -213,62 +213,13 @@ class BackgroundImageLoader {
     }
 
     showImageLoadedNotification() {
-        // Subtle notification that image loaded
-        const notification = document.createElement('div');
-        notification.textContent = '✅ Background image loaded';
-        notification.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(76, 175, 80, 0.9);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            z-index: 1000;
-            animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s;
-        `;
-        
-        document.body.appendChild(notification);
-        setTimeout(() => notification.remove(), 3000);
+        // Silent success - only log to console to avoid visual clutter
+        console.log('✅ Background image loaded successfully');
     }
 
     showImageMissingNotification() {
-        const notification = document.createElement('div');
-        notification.innerHTML = `
-            <strong>📁 Add your background image:</strong><br>
-            Rename your image to <code>background.jpg</code><br>
-            and place it in the project folder
-        `;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 152, 0, 0.95);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            z-index: 1000;
-            text-align: center;
-            max-width: 300px;
-            animation: slideInDown 0.3s ease, fadeOut 0.3s ease 7s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        `;
-        
-        notification.addEventListener('click', () => {
-            notification.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        });
-        
-        document.body.appendChild(notification);
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.style.animation = 'fadeOut 0.3s ease';
-                setTimeout(() => notification.remove(), 300);
-            }
-        }, 8000);
+        // Silent fallback - CSS gradient already handles background elegantly
+        console.log('📷 Background image not found - using CSS gradient fallback');
     }
 }
 
@@ -308,11 +259,41 @@ document.addEventListener('DOMContentLoaded', () => {
     
     console.log('🎯 Alpine.js integration complete - Form reactivity enabled');
 
-    // Add entrance animation
+    // Modern entrance animations with staggered timing
     setTimeout(() => {
-        loginCard.style.opacity = '1';
-        loginCard.style.transform = 'translateY(0)';
-    }, 300);
+        // Background overlay entrance
+        document.querySelector('.background-overlay').classList.add('loaded');
+        
+        // Login card entrance
+        setTimeout(() => {
+            loginCard.classList.add('loaded');
+        }, 300);
+        
+        // Logo animation
+        setTimeout(() => {
+            document.querySelector('.logo-section').classList.add('animate');
+        }, 500);
+        
+        // Input fields animation (staggered)
+        setTimeout(() => {
+            document.querySelectorAll('.input-group').forEach(group => {
+                group.classList.add('animate');
+            });
+        }, 700);
+        
+        // Button animation
+        setTimeout(() => {
+            document.querySelector('.login-btn').classList.add('animate');
+        }, 900);
+        
+        // Forgot password link animation
+        setTimeout(() => {
+            document.querySelector('.forgot-password').classList.add('animate');
+        }, 1100);
+        
+        console.log('✨ Modern entrance animations completed');
+        
+    }, 100);
 });
 
 // Forgot password interaction now handled by Alpine.js
