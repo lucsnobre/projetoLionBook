@@ -68,7 +68,7 @@ function booksApp() {
         // Navigation
         openNewBookModal() {
             // Redireciona para a tela de cadastro
-            window.location.href = '../cadastro/index.html';
+            window.location.href = '../cadastrro/cadastro.html';
         },
 
         closeNewBookModal() {
@@ -79,7 +79,7 @@ function booksApp() {
 
         openStockModal() {
             // Redireciona para a tela de estoque
-            window.location.href = '../estoque/index.html';
+            window.location.href = '../estoque/estoque.html';
         },
 
         closeStockModal() {
