@@ -88,11 +88,11 @@ class FormHandler {
     }
 
     onButtonHover() {
-        cartIcon.style.transform = 'scale(1.1) rotate(5deg)';
+        // Logo image hover effect removed - keeping it simple
     }
 
     onButtonLeave() {
-        cartIcon.style.transform = 'scale(1) rotate(0deg)';
+        // Logo image hover effect removed - keeping it simple
     }
 
     async handleSubmit(e) {
@@ -151,7 +151,8 @@ class FormHandler {
     showSuccess() {
         loginBtn.classList.remove('loading');
         loginBtn.textContent = 'SUCCESS!';
-        loginBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+        loginBtn.style.background = '#4CAF50';
+        loginBtn.style.color = 'white';
         loginCard.classList.add('success-animation');
         
         // Success particles removed (no bubble effects)
@@ -349,19 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
             to { opacity: 1; transform: translate(-50%, 0); }
         }
         
-        @keyframes successParticle {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(
-                    calc(-50% + ${Math.random() * 400 - 200}px),
-                    calc(-50% + ${Math.random() * 400 - 200}px)
-                ) scale(0);
-                opacity: 0;
-            }
-        }
+        /* Success particle animations removed (no bubble effects) */
     `;
     document.head.appendChild(style);
 

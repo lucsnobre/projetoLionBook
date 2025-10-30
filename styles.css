@@ -62,27 +62,23 @@ body::before {
 
 /* Login Card */
 .login-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
+    background: transparent; /* Removido fundo translúcido */
+    /* backdrop-filter: blur(20px); - Removido */
+    /* border: 1px solid rgba(255, 255, 255, 0.2); - Removido */
+    /* border-radius: 20px; - Removido */
     padding: 60px 40px;
     width: 100%;
     max-width: 400px;
     text-align: center;
-    box-shadow: 
-        0 25px 45px rgba(0, 0, 0, 0.1),
-        0 0 80px rgba(255, 255, 255, 0.05);
+    /* box-shadow: removido */
     animation: cardFloat 6s ease-in-out infinite;
     transform-style: preserve-3d;
     transition: all 0.4s ease;
 }
 
 .login-card:hover {
-    transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
-    box-shadow: 
-        0 35px 65px rgba(0, 0, 0, 0.15),
-        0 0 100px rgba(255, 255, 255, 0.1);
+    transform: translateY(-10px);
+    /* box-shadow removido */
 }
 
 @keyframes cardFloat {
@@ -102,23 +98,11 @@ body::before {
     animation: iconBounce 2s ease-in-out infinite;
 }
 
-.cart-icon i {
-    font-size: 4rem;
-    color: white;
-    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+.logo-image {
+    width: 80px;
+    height: auto;
+    filter: brightness(0) invert(1) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
     transition: all 0.3s ease;
-}
-
-.cart-arrow {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    animation: arrowPulse 1.5s ease-in-out infinite;
-}
-
-.cart-arrow i {
-    font-size: 1.5rem;
-    color: #fff;
 }
 
 @keyframes iconBounce {
@@ -127,16 +111,7 @@ body::before {
     60% { transform: translateY(-5px); }
 }
 
-@keyframes arrowPulse {
-    0%, 100% { 
-        transform: scale(1) rotate(0deg);
-        opacity: 1;
-    }
-    50% { 
-        transform: scale(1.2) rotate(10deg);
-        opacity: 0.8;
-    }
-}
+/* Arrow pulse animation removed - not needed for logo image */
 
 /* Form Styles */
 .login-form {
@@ -152,22 +127,19 @@ body::before {
     position: relative;
     overflow: hidden;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
     transition: all 0.3s ease;
 }
 
 .input-wrapper:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.7);
     transform: translateY(-2px);
 }
 
 .input-wrapper:focus-within {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.6);
+    border-color: white;
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .input-icon {
@@ -213,10 +185,10 @@ input:focus::placeholder {
 .login-btn {
     width: 100%;
     padding: 18px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #ffffff;
     border: none;
     border-radius: 12px;
-    color: white;
+    color: #333333;
     font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: 2px;
@@ -225,7 +197,7 @@ input:focus::placeholder {
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .login-btn::before {
@@ -235,7 +207,7 @@ input:focus::placeholder {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
     transition: all 0.6s ease;
 }
 
@@ -245,13 +217,13 @@ input:focus::placeholder {
 
 .login-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    background: #f8f8f8;
 }
 
 .login-btn:active {
     transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Forgot Password Link */
