@@ -74,10 +74,10 @@ function booksApp() {
             }, 1000);
         },
 
-        // Modal Management
+        // Navigation
         openNewBookModal() {
-            this.resetForm();
-            this.showNewBookModal = true;
+            // Redireciona para a tela de cadastro
+            window.location.href = '../cadastro/index.html';
         },
 
         closeNewBookModal() {
@@ -87,7 +87,8 @@ function booksApp() {
         },
 
         openStockModal() {
-            this.showStockModal = true;
+            // Redireciona para a tela de estoque
+            window.location.href = '../estoque/index.html';
         },
 
         closeStockModal() {
