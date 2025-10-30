@@ -1,0 +1,20 @@
+INSTRUÇÕES PARA ADICIONAR O ÍCONE DO LEÃO
+==========================================
+
+1. Salve a imagem do ícone do leão (a imagem azul com o leão branco)
+
+2. Renomeie a imagem para: Group.png
+
+3. Substitua o arquivo existente em:
+   projetoLionBook/img/Group.png
+
+4. As páginas já estão configuradas para usar esse ícone:
+   - cadastrro/cadastro.html
+   - estoque/estoque.html
+
+5. Abra as páginas no navegador para visualizar o resultado final
+
+OBSERVAÇÕES:
+- O ícone aparecerá no header branco no topo da página
+- O tamanho do ícone é 60x60 pixels
+- O caminho da imagem é: ../img/Group.png
