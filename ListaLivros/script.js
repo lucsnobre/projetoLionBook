@@ -1,4 +1,6 @@
 // Books Management App with Alpine.js
+const API_BASE_URL = 'http://localhost:3000';
+
 function booksApp() {
     return {
         // State Management
@@ -37,41 +39,30 @@ function booksApp() {
             img.src = '../img/image.png';
         },
 
-        // Simulate database data loading
-        loadBooks() {
+        // Load books from API
+        async loadBooks() {
             this.isLoading = true;
             
-            // Simulate API call delay
-            setTimeout(() => {
-                this.books = [
-                    {
-                        id: 120,
-                        title: 'A Volta ao Mundo em 80 Dias',
-                        author: 'Júlio Verne',
+            try {
+                const response = await fetch(`${API_BASE_URL}/livros`);
+                const result = await response.json();
+                
+                if (result.status === 'OK') {
+                    this.books = result.data.map(book => ({
+                        ...book,
                         isDeleted: false
-                    },
-                    {
-                        id: 456,
-                        title: 'O velho e o menino',
-                        author: 'Ernest Hemingway',
-                        isDeleted: false
-                    },
-                    {
-                        id: 987,
-                        title: 'As coisas que você só vê quando desacelera',
-                        author: 'Haemin Sunim',
-                        isDeleted: false
-                    },
-                    {
-                        id: 321,
-                        title: 'O Homem que Calculava',
-                        author: 'Malba Tahan',
-                        isDeleted: false
-                    }
-                ];
+                    }));
+                    this.showMessage('success', 'Dados carregados com sucesso!');
+                } else {
+                    throw new Error(result.message || 'Erro ao carregar livros');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar livros:', error);
+                this.showMessage('error', 'Erro ao carregar livros. Verifique se o servidor está funcionando.');
+                this.books = [];
+            } finally {
                 this.isLoading = false;
-                this.showMessage('success', 'Dados carregados com sucesso!');
-            }, 1000);
+            }
         },
 
         // Navigation
@@ -120,24 +111,40 @@ function booksApp() {
             this.closeNewBookModal();
         },
 
-        createBook() {
-            const newId = Math.max(...this.books.map(b => b.id), 0) + 1;
-            
-            const book = {
-                id: newId,
-                title: this.newBook.title.trim(),
-                author: this.newBook.author.trim() || 'Autor não informado',
-                isDeleted: false
-            };
-
-            // Simulate API call
+        async createBook() {
             this.isLoading = true;
             
-            setTimeout(() => {
-                this.books.push(book);
+            try {
+                const bookData = {
+                    title: this.newBook.title.trim(),
+                    author: this.newBook.author.trim() || 'Autor não informado',
+                    isbn: '', // Pode ser adicionado ao formulário depois
+                    quantidade: 1 // Quantidade padrão
+                };
+                
+                const response = await fetch(`${API_BASE_URL}/livros`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bookData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'OK') {
+                    // Recarregar a lista de livros
+                    await this.loadBooks();
+                    this.showMessage('success', `Livro "${bookData.title}" adicionado com sucesso!`);
+                } else {
+                    throw new Error(result.message || 'Erro ao criar livro');
+                }
+            } catch (error) {
+                console.error('Erro ao criar livro:', error);
+                this.showMessage('error', 'Erro ao adicionar livro. Tente novamente.');
+            } finally {
                 this.isLoading = false;
-                this.showMessage('success', `Livro "${book.title}" adicionado com sucesso!`);
-            }, 500);
+            }
         },
 
         editBook(book) {
@@ -150,33 +157,64 @@ function booksApp() {
             this.showNewBookModal = true;
         },
 
-        updateBook() {
-            const book = this.books.find(b => b.id === this.editingBook.id);
+        async updateBook() {
+            this.isLoading = true;
             
-            if (book) {
-                // Simulate API call
-                this.isLoading = true;
+            try {
+                const bookData = {
+                    title: this.newBook.title.trim(),
+                    author: this.newBook.author.trim() || 'Autor não informado'
+                };
                 
-                setTimeout(() => {
-                    book.title = this.newBook.title.trim();
-                    book.author = this.newBook.author.trim() || 'Autor não informado';
-                    this.isLoading = false;
-                    this.showMessage('success', `Livro "${book.title}" atualizado com sucesso!`);
-                }, 500);
+                const response = await fetch(`${API_BASE_URL}/livros/${this.editingBook.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bookData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'OK') {
+                    // Recarregar a lista de livros
+                    await this.loadBooks();
+                    this.showMessage('success', `Livro "${bookData.title}" atualizado com sucesso!`);
+                } else {
+                    throw new Error(result.message || 'Erro ao atualizar livro');
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar livro:', error);
+                this.showMessage('error', 'Erro ao atualizar livro. Tente novamente.');
+            } finally {
+                this.isLoading = false;
             }
         },
 
-        deleteBook(book) {
+        async deleteBook(book) {
             if (confirm(`Tem certeza que deseja excluir o livro "${book.title}"?`)) {
-                // Simulate API call
                 this.isLoading = true;
                 
-                setTimeout(() => {
-                    // Soft delete - mark as deleted instead of removing from array
-                    book.isDeleted = true;
+                try {
+                    const response = await fetch(`${API_BASE_URL}/livros/${book.id}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.status === 'OK') {
+                        // Recarregar a lista de livros
+                        await this.loadBooks();
+                        this.showMessage('success', `Livro "${book.title}" excluído com sucesso!`);
+                    } else {
+                        throw new Error(result.message || 'Erro ao excluir livro');
+                    }
+                } catch (error) {
+                    console.error('Erro ao excluir livro:', error);
+                    this.showMessage('error', 'Erro ao excluir livro. Tente novamente.');
+                } finally {
                     this.isLoading = false;
-                    this.showMessage('success', `Livro "${book.title}" excluído com sucesso!`);
-                }, 500);
+                }
             }
         },
 

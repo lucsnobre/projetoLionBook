@@ -68,31 +68,44 @@ body::before {
     margin: 0 auto;
     padding: 20px;
     position: relative;
+    margin-top: 200px;
 }
 
 /* Header Styles */
 .header {
+    background: white;
     margin-bottom: 40px;
-    padding: 20px 0;
+    padding: 0.0001px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 100;
 }
 
 .logo-section {
     display: flex;
     align-items: center;
     gap: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .logo {
-    width: 60px;
-    height: 60px;
-    filter: brightness(0) invert(1);
+    width: 150px;
+    height: 150px;
+    filter: none;
+    object-fit: contain;
 }
 
 .app-title {
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: white;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: #244BC5;
+    text-shadow: none;
 }
 
 /* Action Buttons */
@@ -146,103 +159,116 @@ body::before {
 
 /* Table Styles */
 .table-container {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 12px;
+    background: transparent;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     position: relative;
+    border: 2px solid #9bb3f0;
 }
 
 .books-table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
+    background: transparent;
 }
 
 .books-table thead {
-    background: rgba(59, 89, 152, 0.8);
-    color: white;
+    background: #9bb3f0;
+    color: #2d4373;
 }
 
 .books-table th {
-    padding: 20px;
-    font-size: 1.1rem;
-    font-weight: 600;
+    padding: 16px 20px;
+    font-size: 1rem;
+    font-weight: 700;
     text-align: left;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    border-right: 2px solid #7a9aed;
+    border-bottom: 2px solid #7a9aed;
 }
 
 .books-table th:first-child {
-    width: 100px;
+    width: 80px;
     text-align: center;
 }
 
 .books-table th:last-child {
-    width: 150px;
+    width: 120px;
     text-align: center;
+    border-right: none;
 }
 
 .table-row {
     transition: all 0.3s ease;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: #4361ee;
+    border-bottom: 2px solid #7a9aed;
 }
 
 .table-row:hover {
-    background: rgba(59, 89, 152, 0.05);
-    transform: scale(1.01);
+    background: #3a4fd8;
+    transform: scale(1.005);
 }
 
 .books-table td {
-    padding: 20px;
-    color: #333;
+    padding: 16px 20px;
+    color: white;
     font-size: 1rem;
+    font-weight: 500;
+    border-right: 2px solid #7a9aed;
 }
 
 .id-cell {
     text-align: center;
-    font-weight: 600;
-    color: #3b5998;
+    font-weight: 700;
+    color: white;
     font-size: 1.1rem;
+    background: #4361ee;
 }
 
 .title-cell {
     font-weight: 500;
+    color: white;
 }
 
 .action-cell {
     text-align: center;
+    border-right: none;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
 }
 
 .action-btn {
-    padding: 8px 12px;
+    padding: 4px;
     margin: 0 4px;
     border: none;
-    border-radius: 6px;
+    background: transparent;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 4px;
 }
 
 .action-icon {
-    width: 16px;
-    height: 16px;
-    filter: brightness(0) invert(1);
+    width: 20px;
+    height: 20px;
     transition: all 0.3s ease;
+    filter: brightness(0) invert(1);
 }
 
 .edit-btn {
-    background: #2196F3;
-    color: white;
+    background: transparent;
 }
 
 .edit-btn:hover {
-    background: #1976D2;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    border-radius: 6px;
 }
 
 .edit-btn:hover .action-icon {
@@ -250,14 +276,13 @@ body::before {
 }
 
 .delete-btn {
-    background: #f44336;
-    color: white;
+    background: transparent;
 }
 
 .delete-btn:hover {
-    background: #d32f2f;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    border-radius: 6px;
 }
 
 .delete-btn:hover .action-icon {
