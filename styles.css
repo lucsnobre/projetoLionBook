@@ -304,6 +304,7 @@ input:focus::placeholder {
     display: inline-block;
     opacity: 0;
     transform: translateY(10px);
+    right: 10px;
 }
 
 .forgot-password.animate {
