@@ -1,11 +1,143 @@
-// DOM Elements
-const loginForm = document.getElementById('loginForm');
-const usernameInput = document.getElementById('username');
-const passwordInput = document.getElementById('password');
-const loginBtn = document.querySelector('.login-btn');
+// Alpine.js Login App
+function loginApp() {
+    return {
+        // Form data
+        form: {
+            username: '',
+            password: ''
+        },
+        
+        // State management
+        isLoading: false,
+        isSuccess: false,
+        isError: false,
+        errorMessage: '',
+        
+        // Computed properties
+        get buttonText() {
+            if (this.isLoading) return '';
+            if (this.isSuccess) return 'SUCCESS!';
+            return 'LOGIN';
+        },
+        
+        get buttonStyle() {
+            if (this.isSuccess) {
+                return {
+                    background: '#ffffff',
+                    color: '#4CAF50',
+                    border: '2px solid #4CAF50'
+                };
+            }
+            return {
+                background: '#ffffff',
+                color: '#333333',
+                border: 'none'
+            };
+        },
+        
+        // Methods
+        async handleSubmit() {
+            // Basic validation
+            if (!this.form.username.trim() || !this.form.password.trim()) {
+                this.showError('Please fill in all fields');
+                return;
+            }
+
+            if (this.form.username.length < 3) {
+                this.showError('Username must be at least 3 characters');
+                return;
+            }
+
+            if (this.form.password.length < 6) {
+                this.showError('Password must be at least 6 characters');
+                return;
+            }
+
+            // Show loading state
+            this.isLoading = true;
+            this.clearError();
+
+            try {
+                // Simulate API call
+                await this.simulateLogin(this.form.username, this.form.password);
+                this.showSuccess();
+            } catch (error) {
+                this.showError(error.message);
+            }
+        },
+        
+        simulateLogin(username, password) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (username.toLowerCase() === 'admin' && password === 'password') {
+                        resolve({ success: true });
+                    } else {
+                        reject(new Error('Invalid credentials'));
+                    }
+                }, 2000);
+            });
+        },
+        
+        showSuccess() {
+            this.isLoading = false;
+            this.isSuccess = true;
+            
+            setTimeout(() => {
+                console.log('Login successful! Redirect to dashboard...');
+            }, 1500);
+        },
+        
+        showError(message) {
+            this.isLoading = false;
+            this.isError = true;
+            this.errorMessage = message;
+            
+            // Remove error state after animation
+            setTimeout(() => {
+                this.isError = false;
+            }, 500);
+            
+            // Clear error message after 3 seconds
+            setTimeout(() => {
+                this.errorMessage = '';
+            }, 3000);
+        },
+        
+        clearError() {
+            this.errorMessage = '';
+            this.isError = false;
+        },
+        
+        showForgotPassword() {
+            // Create notification
+            const message = document.createElement('div');
+            message.textContent = 'Password reset functionality would be implemented here';
+            message.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(255, 255, 255, 0.9);
+                color: #333;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease;
+            `;
+            
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => message.remove(), 300);
+            }, 3000);
+        }
+    }
+}
+
+// Legacy DOM Elements (para manter compatibilidade com código existente)
 const loginCard = document.querySelector('.login-card');
 const cartIcon = document.querySelector('.cart-icon');
-const forgotPasswordLink = document.querySelector('.forgot-password');
 
 // Particle System for Background Effects - DISABLED
 class ParticleSystem {
@@ -42,209 +174,20 @@ class ParallaxEffect {
     }
 }
 
-// Form Validation and Animation
+// Form Handler - Simplified (Alpine.js handles most form logic now)
 class FormHandler {
     constructor() {
-        this.init();
+        // Alpine.js now handles form validation and submission
+        // Keeping this class for any additional form enhancements if needed
+        console.log('Form handling delegated to Alpine.js');
     }
-
-    init() {
-        // Form submission
-        loginForm.addEventListener('submit', (e) => this.handleSubmit(e));
-        
-        // Input focus animations
-        [usernameInput, passwordInput].forEach(input => {
-            input.addEventListener('focus', () => this.onInputFocus(input));
-            input.addEventListener('blur', () => this.onInputBlur(input));
-            input.addEventListener('input', () => this.onInputChange(input));
-        });
-
-        // Button hover effects
-        loginBtn.addEventListener('mouseenter', () => this.onButtonHover());
-        loginBtn.addEventListener('mouseleave', () => this.onButtonLeave());
-    }
-
-    onInputFocus(input) {
-        const wrapper = input.closest('.input-wrapper');
-        wrapper.style.transform = 'translateY(-3px)';
-        wrapper.style.boxShadow = '0 10px 25px rgba(255, 255, 255, 0.1)';
-    }
-
-    onInputBlur(input) {
-        const wrapper = input.closest('.input-wrapper');
-        if (!input.value) {
-            wrapper.style.transform = 'translateY(0)';
-            wrapper.style.boxShadow = 'none';
-        }
-    }
-
-    onInputChange(input) {
-        const wrapper = input.closest('.input-wrapper');
-        if (input.value) {
-            wrapper.classList.add('has-value');
-        } else {
-            wrapper.classList.remove('has-value');
-        }
-    }
-
-    onButtonHover() {
-        // Logo image hover effect removed - keeping it simple
-    }
-
-    onButtonLeave() {
-        // Logo image hover effect removed - keeping it simple
-    }
-
-    async handleSubmit(e) {
-        e.preventDefault();
-        
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value.trim();
-
-        // Basic validation
-        if (!username || !password) {
-            this.showError('Please fill in all fields');
-            return;
-        }
-
-        if (username.length < 3) {
-            this.showError('Username must be at least 3 characters');
-            return;
-        }
-
-        if (password.length < 6) {
-            this.showError('Password must be at least 6 characters');
-            return;
-        }
-
-        // Show loading state
-        this.showLoading();
-
-        // Simulate API call
-        try {
-            await this.simulateLogin(username, password);
-            this.showSuccess();
-        } catch (error) {
-            this.showError(error.message);
-        }
-    }
-
-    simulateLogin(username, password) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                // Simple demo validation
-                if (username.toLowerCase() === 'admin' && password === 'password') {
-                    resolve({ success: true });
-                } else {
-                    reject(new Error('Invalid credentials'));
-                }
-            }, 2000);
-        });
-    }
-
-    showLoading() {
-        loginBtn.textContent = '';
-        loginBtn.classList.add('loading');
-        loginBtn.disabled = true;
-    }
-
-    showSuccess() {
-        loginBtn.classList.remove('loading');
-        loginBtn.textContent = 'SUCCESS!';
-        loginBtn.style.background = '#ffffff';
-        loginBtn.style.color = '#4CAF50';
-        loginBtn.style.border = '2px solid #4CAF50';
-        loginCard.classList.add('success-animation');
-        
-        // Success particles removed (no bubble effects)
-        
-        setTimeout(() => {
-            // Redirect or show next step
-            console.log('Login successful! Redirect to dashboard...');
-        }, 1500);
-    }
-
-    showError(message) {
-        loginBtn.classList.remove('loading');
-        loginBtn.textContent = 'LOGIN';
-        loginBtn.style.background = '#ffffff';
-        loginBtn.style.color = '#333333';
-        loginBtn.style.border = 'none';
-        loginBtn.disabled = false;
-        
-        // Shake animation
-        loginCard.classList.add('error-shake');
-        
-        // Show error message
-        this.displayErrorMessage(message);
-        
-        setTimeout(() => {
-            loginCard.classList.remove('error-shake');
-        }, 500);
-    }
-
-    displayErrorMessage(message) {
-        // Remove existing error message
-        const existingError = document.querySelector('.error-message');
-        if (existingError) {
-            existingError.remove();
-        }
-
-        // Create error message
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.textContent = message;
-        errorDiv.style.cssText = `
-            color: #ff6b6b;
-            background: rgba(255, 107, 107, 0.1);
-            border: 1px solid rgba(255, 107, 107, 0.3);
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            text-align: center;
-            animation: errorFadeIn 0.3s ease;
-        `;
-
-        loginForm.appendChild(errorDiv);
-
-        // Remove error after 3 seconds
-        setTimeout(() => {
-            errorDiv.style.animation = 'errorFadeOut 0.3s ease';
-            setTimeout(() => errorDiv.remove(), 300);
-        }, 3000);
-    }
-
 }
 
-// Typewriter Effect for Placeholders
+// Typewriter Effect - Simplified for Alpine.js compatibility
 class TypewriterEffect {
     constructor() {
-        this.init();
-    }
-
-    init() {
-        setTimeout(() => {
-            this.typeWriterEffect(usernameInput, 'USERNAME', 100);
-        }, 1000);
-        
-        setTimeout(() => {
-            this.typeWriterEffect(passwordInput, 'PASSWORD', 100);
-        }, 2000);
-    }
-
-    typeWriterEffect(element, text, speed) {
-        element.placeholder = '';
-        let i = 0;
-        
-        const timer = setInterval(() => {
-            if (i < text.length) {
-                element.placeholder += text.charAt(i);
-                i++;
-            } else {
-                clearInterval(timer);
-            }
-        }, speed);
+        // Typewriter effect simplified - placeholders are now static for better Alpine.js integration
+        console.log('Typewriter effect simplified for Alpine.js compatibility');
     }
 }
 
@@ -358,12 +301,12 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(style);
 
-    // Initialize all components
+    // Initialize components (Alpine.js handles form, we keep visual effects)
     new BackgroundImageLoader();
-    new ParticleSystem();
     new ParallaxEffect();
-    new FormHandler();
     new TypewriterEffect();
+    
+    console.log('🎯 Alpine.js integration complete - Form reactivity enabled');
 
     // Add entrance animation
     setTimeout(() => {
@@ -372,33 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 300);
 });
 
-// Forgot password interaction
-forgotPasswordLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    
-    // Create modal or show message
-    const message = document.createElement('div');
-    message.textContent = 'Password reset functionality would be implemented here';
-    message.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(255, 255, 255, 0.9);
-        color: #333;
-        padding: 15px 20px;
-        border-radius: 8px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        animation: slideInRight 0.3s ease;
-    `;
-    
-    document.body.appendChild(message);
-    
-    setTimeout(() => {
-        message.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => message.remove(), 300);
-    }, 3000);
-});
+// Forgot password interaction now handled by Alpine.js
 
 // Add slide animations
 const slideAnimations = document.createElement('style');
