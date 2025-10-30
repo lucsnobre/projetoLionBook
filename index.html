@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Marcel Project</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <div class="container">
+        <div class="login-card">
+            <!-- Logo/Icon Section -->
+            <div class="logo-section">
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <div class="cart-arrow">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Login Form -->
+            <form class="login-form" id="loginForm">
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="username" placeholder="USERNAME" required>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="password" placeholder="PASSWORD" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn">LOGIN</button>
+                
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </form>
+        </div>
+        
+        <!-- Floating Elements for Animation -->
+        <div class="floating-elements">
+            <div class="floating-circle circle-1"></div>
+            <div class="floating-circle circle-2"></div>
+            <div class="floating-circle circle-3"></div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
