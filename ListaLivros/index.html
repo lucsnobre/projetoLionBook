@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LionBook - Gestão de Livros</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="shortcut icon" href="../img/Vector.png" type="image/x-icon">
+</head>
+<body x-data="booksApp()">
+    <div class="background-overlay"></div>
+    
+    <div class="container">
+        <!-- Header with Logo -->
+        <header class="header">
+            <div class="logo-section">
+                <img src="../img/Group.png" alt="LionBook Logo" class="logo">
+                <h1 class="app-title">LionBook</h1>
+            </div>
+        </header>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" @click="openNewBookModal">
+                <i class="fas fa-plus"></i>
+                NOVO LIVRO
+            </button>
+            <button class="btn btn-secondary" @click="openStockModal">
+                <i class="fas fa-box"></i>
+                ESTOQUE
+            </button>
+        </div>
+
+        <!-- Books Table -->
+        <div class="table-container">
+            <table class="books-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>TÍTULO</th>
+                        <th>AÇÃO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template x-for="book in books" :key="book.id">
+                        <tr class="table-row" x-show="!book.isDeleted" 
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 transform scale-95"
+                            x-transition:enter-end="opacity-100 transform scale-100">
+                            <td class="id-cell" x-text="book.id"></td>
+                            <td class="title-cell" x-text="book.title"></td>
+                            <td class="action-cell">
+                                <button class="action-btn edit-btn" @click="editBook(book)" title="Editar">
+                                    <img src="../img/Edit.png" alt="Editar" class="action-icon">
+                                </button>
+                                <button class="action-btn delete-btn" @click="deleteBook(book)" title="Excluir">
+                                    <img src="../img/Excluir.png" alt="Excluir" class="action-icon">
+                                </button>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+
+            <!-- Empty State -->
+            <div x-show="books.filter(b => !b.isDeleted).length === 0" class="empty-state">
+                <i class="fas fa-book-open"></i>
+                <h3>Nenhum livro encontrado</h3>
+                <p>Clique em "NOVO LIVRO" para adicionar o primeiro livro</p>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div x-show="isLoading" class="loading-overlay">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Carregando...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Book Modal -->
+    <div x-show="showNewBookModal" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="modal-overlay" 
+         @click.self="closeNewBookModal">
+        <div class="modal-content"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-95"
+             x-transition:enter-end="opacity-100 transform scale-100">
+            <div class="modal-header">
+                <h2 x-text="editingBook ? 'Editar Livro' : 'Novo Livro'"></h2>
+                <button class="close-btn" @click="closeNewBookModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form @submit.prevent="saveBook" class="modal-form">
+                <div class="form-group">
+                    <label for="bookTitle">Título do Livro</label>
+                    <input type="text" 
+                           id="bookTitle" 
+                           x-model="newBook.title" 
+                           placeholder="Digite o título do livro"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="bookAuthor">Autor</label>
+                    <input type="text" 
+                           id="bookAuthor" 
+                           x-model="newBook.author" 
+                           placeholder="Digite o nome do autor">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel" @click="closeNewBookModal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-save" :disabled="!newBook.title">
+                        <span x-text="editingBook ? 'Atualizar' : 'Salvar'"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Stock Modal -->
+    <div x-show="showStockModal" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         class="modal-overlay" 
+         @click.self="closeStockModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Controle de Estoque</h2>
+                <button class="close-btn" @click="closeStockModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="stock-info">
+                <div class="stock-card">
+                    <i class="fas fa-book"></i>
+                    <div class="stock-details">
+                        <h3 x-text="books.filter(b => !b.isDeleted).length"></h3>
+                        <p>Livros Cadastrados</p>
+                    </div>
+                </div>
+                <div class="stock-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stock-details">
+                        <h3>Em Breve</h3>
+                        <p>Funcionalidades Avançadas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div x-show="message.show" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-y-2"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         :class="['notification', message.type]">
+        <i :class="message.type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle'"></i>
+        <span x-text="message.text"></span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
