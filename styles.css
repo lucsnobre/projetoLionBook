@@ -197,7 +197,7 @@ input:focus::placeholder {
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .login-btn::before {
@@ -217,13 +217,13 @@ input:focus::placeholder {
 
 .login-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
-    background: #f8f8f8;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    background: #ffffff;
 }
 
 .login-btn:active {
     transform: translateY(-1px);
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Forgot Password Link */

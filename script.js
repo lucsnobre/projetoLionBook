@@ -151,8 +151,9 @@ class FormHandler {
     showSuccess() {
         loginBtn.classList.remove('loading');
         loginBtn.textContent = 'SUCCESS!';
-        loginBtn.style.background = '#4CAF50';
-        loginBtn.style.color = 'white';
+        loginBtn.style.background = '#ffffff';
+        loginBtn.style.color = '#4CAF50';
+        loginBtn.style.border = '2px solid #4CAF50';
         loginCard.classList.add('success-animation');
         
         // Success particles removed (no bubble effects)
@@ -166,6 +167,9 @@ class FormHandler {
     showError(message) {
         loginBtn.classList.remove('loading');
         loginBtn.textContent = 'LOGIN';
+        loginBtn.style.background = '#ffffff';
+        loginBtn.style.color = '#333333';
+        loginBtn.style.border = 'none';
         loginBtn.disabled = false;
         
         // Shake animation
