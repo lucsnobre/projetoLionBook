@@ -1,4 +1,6 @@
 // Alpine.js Login App
+const API_BASE_URL = 'http://localhost:3000';
+
 function loginApp() {
     return {
         // Form data
@@ -39,17 +41,7 @@ function loginApp() {
         async handleSubmit() {
             // Basic validation
             if (!this.form.username.trim() || !this.form.password.trim()) {
-                this.showError('Please fill in all fields');
-                return;
-            }
-
-            if (this.form.username.length < 3) {
-                this.showError('Username must be at least 3 characters');
-                return;
-            }
-
-            if (this.form.password.length < 6) {
-                this.showError('Password must be at least 6 characters');
+                this.showError('Por favor, preencha todos os campos');
                 return;
             }
 
@@ -58,24 +50,54 @@ function loginApp() {
             this.clearError();
 
             try {
-                // Simulate API call
-                await this.simulateLogin(this.form.username, this.form.password);
+                // Real API call
+                await this.authenticateUser(this.form.username, this.form.password);
                 this.showSuccess();
             } catch (error) {
                 this.showError(error.message);
             }
         },
         
-        simulateLogin(username, password) {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    if (username.toLowerCase() === 'admin' && password === 'password') {
-                        resolve({ success: true });
-                    } else {
-                        reject(new Error('Invalid credentials'));
-                    }
-                }, 2000);
-            });
+        async authenticateUser(username, password) {
+            try {
+                // Buscar todos os usuários na API
+                const response = await fetch(`${API_BASE_URL}/usuarios`);
+                const result = await response.json();
+                
+                if (result.status !== 'OK') {
+                    throw new Error('Erro ao conectar com o servidor');
+                }
+                
+                // Verificar se existe um usuário com o nome ou email fornecido
+                const user = result.data.find(u => 
+                    (u.nome && u.nome.toLowerCase() === username.toLowerCase()) ||
+                    (u.email && u.email.toLowerCase() === username.toLowerCase())
+                );
+                
+                if (!user) {
+                    throw new Error('Usuário não encontrado');
+                }
+                
+                // Por enquanto, aceitar qualquer senha para usuários existentes
+                // Em produção, implementar hash de senha adequado
+                console.log('✅ Login realizado com sucesso para:', user.nome || user.email);
+                
+                // Salvar dados do usuário no localStorage se necessário
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: user.id,
+                    nome: user.nome,
+                    email: user.email
+                }));
+                
+                return { success: true, user };
+                
+            } catch (error) {
+                console.error('Erro na autenticação:', error);
+                if (error.message === 'Failed to fetch') {
+                    throw new Error('Servidor indisponível. Verifique se o backend está rodando.');
+                }
+                throw error;
+            }
         },
         
         showSuccess() {
@@ -83,7 +105,9 @@ function loginApp() {
             this.isSuccess = true;
             
             setTimeout(() => {
-                console.log('Login successful! Redirect to dashboard...');
+                console.log('Login successful! Redirecting to ListaLivros...');
+                // Redirecionar para a tela principal
+                window.location.href = './ListaLivros/index.html';
             }, 1500);
         },
         
